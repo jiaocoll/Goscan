@@ -2,6 +2,7 @@
 简易的Go主机发现和端口扫描
 目前是demo，有待完善
 ```
+Pandora.exe [选项] [ip]
 Options:
   -h, --help
         help, 帮助命令
