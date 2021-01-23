@@ -1,8 +1,9 @@
 package main
 
 import (
-	"Pandora/HostDiscovery/Ping"
-	"Pandora/PortScan"
+	"github.com/fatih/color"
+	"Goscan/HostDiscovery/Ping"
+	"Goscan/PortScan"
 	"flag"
 	"fmt"
 	"os"
@@ -29,9 +30,9 @@ func init(){
 }
 
 func usage(){
-	fmt.Fprintf(os.Stderr,`Ameng编写的Go语言综合渗透工具——Pandora
+	fmt.Fprintf(os.Stderr,color.CyanString(`Ameng编写的Go语言主机发现和端口扫描工具——Goscan
 Options:
-`)
+`))
 	flag.PrintDefaults()
 }
 
@@ -45,19 +46,19 @@ func main(){
 		start := time.Now()
 		Ping.PingScan(pingscan)
 		end := time.Since(start)
-		fmt.Print("花费时间为:",end)
+		fmt.Print(color.GreenString("花费时间为:"),end)
 	}
 	if  portscan != ""{
 		start := time.Now()
 		PortScan.PortScan(ip,portscan)
 		end := time.Since(start)
-		fmt.Print("花费时间为:",end)
+		fmt.Print(color.GreenString("花费时间为:"),end)
 	}
 	if portbanner != ""{
 		start := time.Now()
 		PortScan.Bannerscan(ip,portbanner)
 		end := time.Since(start)
-		fmt.Print("花费时间为:",end)
+		fmt.Print(color.GreenString("花费时间为:"),end)
 	}
 
 

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os/exec"
 	"runtime"
+	"github.com/fatih/color"
 	"strconv"
 	"strings"
 	"sync"
@@ -56,13 +57,13 @@ func CScan(target string) (result []string) {
 func PingScan(ip string){
 	if strings.Contains(ip,"/24") {
 		ips := CScan(ip)
-		fmt.Println("总存活主机个数为:",len(ips))
+		fmt.Println(color.HiCyanString("总存活主机个数为:"),len(ips))
 		for _,ip := range ips{
-			fmt.Println("[+]存活的主机:",ip)
+			fmt.Println(color.HiMagentaString("[+]存活的主机:"),ip)
 		}
 	}else {
 		if (PingOne(ip)){
-			fmt.Println("[+]存活的主机:",ip)
+			fmt.Println(color.HiMagentaString("[+]存活的主机:"),ip)
 		}
 	}
 }

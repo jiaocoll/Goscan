@@ -1,7 +1,8 @@
 package PortScan
 
 import (
-	"Pandora/HostDiscovery/Ping"
+	"github.com/fatih/color"
+	"Goscan/HostDiscovery/Ping"
 	"fmt"
 	"net"
 	"strconv"
@@ -71,8 +72,8 @@ func PortScanMore(ips []string, ports string)(result []string){
 			defer wg.Done()
 			aliveport = PortScanOne(ip,ports)
 			if aliveport != nil{
-				fmt.Println("[*]"+ip+":")
-				fmt.Println("PORT\tSTATUS")
+				fmt.Println(color.HiMagentaString("[+]")+ip+":")
+				fmt.Println(color.HiCyanString("PORT\tSTATUS"))
 				for _,port := range aliveport{
 					fmt.Println(port+"\tOpen")
 				}
@@ -91,11 +92,11 @@ func PortScan(ip string, ports string){
 	}else {
 		aliveport := PortScanOne(ip,ports)
 		fmt.Println(ip+":")
-		fmt.Println("PORT\tSTATUS")
+		fmt.Println(color.HiCyanString("PORT\tSTATUS"))
 		for _,port := range aliveport{
 			fmt.Println(port+"\tOpen")
 		}
-		fmt.Println("开放端口个数为:",len(aliveport))
+		fmt.Println(color.CyanString("开放端口个数为:"),len(aliveport))
 	}
 }
 
@@ -139,7 +140,7 @@ func BannerCheck(ip string, ports string)(Ip string,Ports []string,Banners []str
 func Bannerscan(ip string, ports string){
 	r1,r2,r3 := BannerCheck(ip,ports)
 	fmt.Println(r1,":")
-	fmt.Println("PORT\tSTATUS\tSERVER")
+	fmt.Println(color.HiCyanString("PORT\tSTATUS\tSERVER"))
 	for i:=0;i<len(r2);i++{
 		fmt.Println(r2[i]+"\tOpen\t"+r3[i])
 	}
