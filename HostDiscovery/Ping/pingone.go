@@ -54,18 +54,22 @@ func CScan(target string) (result []string) {
 	return result
 }
 
-func PingScan(ip string){
-	if strings.Contains(ip,"/24") {
-		ips := CScan(ip)
-		fmt.Println(color.HiCyanString("总存活主机个数为:"),len(ips))
-		for _,ip := range ips{
-			fmt.Println(color.HiMagentaString("[+]存活的主机:"),ip)
-		}
-	}else {
-		if (PingOne(ip)){
-			fmt.Println(color.HiMagentaString("[+]存活的主机:"),ip)
+func PingScan(target string){
+	ips := strings.Split(target,",")
+	for _,ip := range ips{
+		if strings.Contains(ip,"/24") {
+			ips := CScan(ip)
+			fmt.Println(color.HiCyanString("总存活主机个数为:"),len(ips))
+			for _,ip := range ips{
+				fmt.Println(color.HiMagentaString("[+]存活的主机:"),ip)
+			}
+		}else {
+			if (PingOne(ip)){
+				fmt.Println(color.HiMagentaString("[+]存活的主机:"),ip)
+			}
 		}
 	}
+
 }
 
 

@@ -100,48 +100,4 @@ func PortScan(ip string, ports string){
 	}
 }
 
-func BannerCheck(ip string, ports string)(Ip string,Ports []string,Banners []string){
-	var banner string
-	portresult := PortScanOne(ip,ports)
-	for _, port := range portresult{
-		tcpAddr := ip + ":" + port
-		conn, err := net.DialTimeout("tcp",tcpAddr,time.Second*2)
-		if err == nil {
-			fmt.Fprintf(conn,"\r\n\r\n")
-			conn.SetReadDeadline(time.Now().Add(time.Second*2))
-			buff := make([]byte,1024)
-			num,_:= conn.Read(buff)
-			banner = string(buff[:num])
-			if banner == "" {
-				fmt.Fprintf(conn,"GET / HTTP/1.1\r\n\r\n")
-				conn.SetReadDeadline(time.Now().Add(time.Second*2))
-				buff := make([]byte,1024)
-				num,_:= conn.Read(buff)
-				banner = string(buff[:num])
-			}
-			banner = strings.Replace(banner,"\r\n","",-1)
-			if strings.Contains(banner, "HTTP") {
-				Banners = append(Banners,"http")
-			}else if strings.Contains(banner,"SSH") {
-				Banners = append(Banners,"ssh")
-			}else if strings.Contains(banner,"FTP") {
-				Banners = append(Banners,"ftp")
-			}else if strings.Contains(banner,"TELNET") {
-				Banners = append(Banners,"telnet")
-			}else {
-				Banners = append(Banners,"")
-			}
-		}
-	}
-	return ip,portresult,Banners
 
-}
-
-func Bannerscan(ip string, ports string){
-	r1,r2,r3 := BannerCheck(ip,ports)
-	fmt.Println(r1,":")
-	fmt.Println(color.HiCyanString("PORT\tSTATUS\tSERVER"))
-	for i:=0;i<len(r2);i++{
-		fmt.Println(r2[i]+"\tOpen\t"+r3[i])
-	}
-}
