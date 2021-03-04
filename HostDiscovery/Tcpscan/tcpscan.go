@@ -2,6 +2,8 @@ package Tcpscan
 
 import (
 	"fmt"
+	"github.com/fatih/color"
+	"math/rand"
 	"net"
 	"strconv"
 	"strings"
@@ -39,17 +41,20 @@ func Portcheck(ip string, port string) bool{
 	}
 }
 
-func TcpscanOne(ip string) bool{
-	var result bool
+func TcpscanOne(targets []string) []string{
+	var result []string
 	var wg sync.WaitGroup
-	for _,port := range topport {
+	for _,target := range targets{
+		tmp := strings.Split(target,":")
+		ip := tmp[0]
+		port := tmp[1]
 		wg.Add(1)
-		go func(port string) {
+		go func(ip string,port string) {
+			defer wg.Done()
 			if (Portcheck(ip,port)){
-				result = true
+				result = append(result, ip)
 			}
-			wg.Done()
-		}(strconv.Itoa(port))
+		}(ip,port)
 	}
 	wg.Wait()
 	return result
@@ -57,17 +62,45 @@ func TcpscanOne(ip string) bool{
 
 func Tcpscan(ip string) {
 	ips := strings.Split(ip,",")
-	var aliveip []string
-	var wg sync.WaitGroup
-	for _,ip := range ips{
-		wg.Add(1)
-		go func(ip string) {
-			if (TcpscanOne(ip)){
-				aliveip = append(aliveip, ip)
-			}
-			wg.Done()
-		}(ip)
+	targets := iprange(ips,topport)
+	aliveip := TcpscanOne(targets)
+	aliveip = Removesamesip(aliveip)
+	fmt.Println(color.CyanString("存活的主机:"))
+	for _,v := range aliveip{
+		fmt.Println(v)
 	}
-	wg.Wait()
-	fmt.Println(aliveip)
+}
+
+//随机目标
+func iprange(ips []string,ports []int) []string{
+	var ipstmp []string
+	var targets []string
+
+	for _, port := range ports {
+		for _,host := range ips{
+			ipstmp = append(ipstmp,host)
+		}
+		for i := 0; i < len(ips); i++ {
+			numSize := len(ipstmp)
+			key := rand.Intn(numSize)
+			ip := ipstmp[key]
+			ipstmp = append(ipstmp[:key], ipstmp[key+1:]...)
+			target := ip+":"+strconv.Itoa(port)
+			targets = append(targets,target)
+		}
+	}
+	return targets
+}
+
+//数组去重函数
+func Removesamesip(ips [] string)(result []string){
+	result = make([]string, 0)
+	tempMap := make(map[string]bool, len(ips))
+	for _, e := range ips{
+		if tempMap[e] == false{
+			tempMap[e] = true
+			result = append(result, e)
+		}
+	}
+	return result
 }
