@@ -15,5 +15,5 @@ Options:
   -sT string
         输入目标ip进行TCP连接扫描,例如:-sT 192.168.10.1,192,168,10,45
   -ds string
-        输入目标url进行目录扫描,例如:-dc https://www.example.com
+        输入目标url进行目录扫描,例如:-ds https://www.example.com
 ```
