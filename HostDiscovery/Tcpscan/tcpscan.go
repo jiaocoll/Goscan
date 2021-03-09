@@ -65,7 +65,7 @@ func Tcpscan(ip string) {
 	targets := iprange(ips,topport)
 	aliveip := TcpscanOne(targets)
 	aliveip = Removesamesip(aliveip)
-	fmt.Println(color.CyanString("存活的主机:"))
+	fmt.Fprintln(color.Output,color.CyanString("存活的主机:"))
 	for _,v := range aliveip{
 		fmt.Println(v)
 	}

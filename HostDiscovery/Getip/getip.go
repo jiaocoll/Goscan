@@ -1,16 +1,17 @@
 package main
 
 import (
+	"fmt"
 	"github.com/fatih/color"
-	"log"
 	"net"
 	"sync"
+	"time"
 )
 
 func Getipbyhost(hostname string) string {
 	ip, err := net.ResolveIPAddr("ip",hostname)
 	if err != nil {
-		log.Println(color.YellowString("[WARNING]")+":",err)
+		fmt.Fprintln(color.Output,time.Now().Format("2006/01/02 15:04:05"),color.YellowString("[WARNING]")+":",err)
 	}
 	return ip.String()
 }

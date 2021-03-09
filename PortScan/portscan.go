@@ -72,8 +72,8 @@ func PortScanMore(ips []string, ports string)(result []string){
 			defer wg.Done()
 			aliveport = PortScanOne(ip,ports)
 			if aliveport != nil{
-				fmt.Println(color.HiMagentaString("[+]")+ip+":")
-				fmt.Println(color.HiCyanString("PORT\tSTATUS"))
+				fmt.Fprintln(color.Output,color.HiMagentaString("[+]")+ip+":")
+				fmt.Fprintln(color.Output,color.HiCyanString("PORT\tSTATUS"))
 				for _,port := range aliveport{
 					fmt.Println(port+"\tOpen")
 				}
@@ -92,11 +92,11 @@ func PortScan(ip string, ports string){
 	}else {
 		aliveport := PortScanOne(ip,ports)
 		fmt.Println(ip+":")
-		fmt.Println(color.HiCyanString("PORT\tSTATUS"))
+		fmt.Fprintln(color.Output,color.HiCyanString("PORT\tSTATUS"))
 		for _,port := range aliveport{
 			fmt.Println(port+"\tOpen")
 		}
-		fmt.Println(color.CyanString("开放端口个数为:"),len(aliveport))
+		fmt.Fprintln(color.Output,color.CyanString("开放端口个数为:"),len(aliveport))
 	}
 }
 

@@ -1,6 +1,5 @@
 # Goscan
-简易的Go主机发现和端口扫描
-目前是demo，有待完善
+Go主机发现和端口扫描
 ```
 Pandora.exe [选项] [ip]
 Options:

@@ -2,10 +2,11 @@ package Dirscan
 
 import (
 	"bufio"
+	"fmt"
 	"github.com/fatih/color"
-	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 
@@ -33,7 +34,7 @@ func Dirscan(url string,dirfile string){
 
 	infile, err := os.OpenFile(dirfile,os.O_RDONLY,1)
 	if err != nil {
-		log.Println(color.RedString("[ERROR]")+":",err)
+		fmt.Fprintln(color.Output,time.Now().Format("2006-01-02 15:04:05"),color.RedString("[ERROR]")+":",err)
 	}
 	tmps := bufio.NewScanner(infile)
 	for tmps.Scan() {
@@ -44,7 +45,7 @@ func Dirscan(url string,dirfile string){
 	for _,dir := range dirs{
 		target := url + dir
 		if dircheck(target) {
-			log.Println(color.CyanString(target))
+			fmt.Fprintln(color.Output,time.Now().Format("2006/01/02 15:04:05"),color.HiCyanString(target))
 		}
 	}
 
