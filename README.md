@@ -1,10 +1,12 @@
 # Goscan
 Go主机发现和端口扫描
 ```
-Pandora.exe [选项] [ip]
+Goscan.exe [选项] [ip]
 Options:
   -h, --help
         help, 帮助命令
+  -dict string
+        字典文件
   -p string
         PortScan, 输入目标ip进行端口扫描,仅判断是否开启,速度较快,例如:-p 22,80或22-8080
   -pv string
