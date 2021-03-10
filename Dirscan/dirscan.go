@@ -18,6 +18,7 @@ var (
 
 func dircheck(url string) bool{
 	resp,err := http.Get(url)
+	defer resp.Body.Close()
 	if nil != resp {
 		defer resp.Body.Close()
 	}
