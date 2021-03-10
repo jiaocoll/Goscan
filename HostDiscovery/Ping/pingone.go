@@ -3,9 +3,10 @@ package Ping
 import (
 	"bytes"
 	"fmt"
+	"github.com/fatih/color"
+	"github.com/panjf2000/ants/v2"
 	"os/exec"
 	"runtime"
-	"github.com/fatih/color"
 	"strconv"
 	"strings"
 	"sync"
@@ -37,22 +38,24 @@ func CScan(target string) (result []string) {
 	ip := strings.Replace(target, "/24", "", -1)
 	ips := strings.Split(ip,".")
 	ip = ips[0] + "." + ips[1] + "." + ips[2]
-	var aliveip = []string{}
+	var aliveip []string
 	var wg sync.WaitGroup
+	p, _ := ants.NewPoolWithFunc(50000, func(i interface{}) {
+		if(PingOne(i.(string))){
+			aliveip = append(aliveip, i.(string))
+		}
+		wg.Done()
+	})
 	for i:=1;i<255;i++{
 		ip := ip + "." + strconv.Itoa(i)
 		wg.Add(1)
-		go func(ip string) {
-			defer wg.Done()
-			if (PingOne(ip)){
-				aliveip = append(aliveip, ip)
-			}
-		}(ip)
+		_ = p.Invoke(ip)
 	}
 	wg.Wait()
 	result = aliveip
 	return result
 }
+
 
 func PingScan(target string){
 	ips := strings.Split(target,",")

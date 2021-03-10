@@ -4,8 +4,10 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/fatih/color"
+	"github.com/panjf2000/ants/v2"
 	"net/http"
 	"os"
+	"sync"
 	"time"
 )
 
@@ -43,11 +45,17 @@ func Dirscan(url string,dirfile string){
 		dirs = append(dirs, tmp)
 
 	}
+	var wg sync.WaitGroup
+	p, _ := ants.NewPoolWithFunc(50000, func(i interface{}) {
+		if(dircheck(i.(string))){
+			fmt.Fprintln(color.Output,time.Now().Format("2006/01/02 15:04:05"),color.HiCyanString(i.(string)))
+		}
+		wg.Done()
+	})
 	for _,dir := range dirs{
 		target := url + dir
-		if dircheck(target) {
-			fmt.Fprintln(color.Output,time.Now().Format("2006/01/02 15:04:05"),color.HiCyanString(target))
-		}
+		wg.Add(1)
+		_ = p.Invoke(target)
 	}
-
+	wg.Wait()
 }

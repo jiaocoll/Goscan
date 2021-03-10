@@ -3,6 +3,7 @@ package Tcpscan
 import (
 	"fmt"
 	"github.com/fatih/color"
+	"github.com/panjf2000/ants/v2"
 	"math/rand"
 	"net"
 	"strconv"
@@ -30,9 +31,8 @@ var (
 		}
 )
 
-func Portcheck(ip string, port string) bool{
-	ip = ip + ":" + port
-	conn, err := net.DialTimeout("tcp",ip,time.Second*3)
+func Portcheck(target string) bool{
+	conn, err := net.DialTimeout("tcp",target,time.Second*3)
 	if err != nil{
 		return false
 	}else {
@@ -44,26 +44,29 @@ func Portcheck(ip string, port string) bool{
 func TcpscanOne(targets []string) []string{
 	var result []string
 	var wg sync.WaitGroup
+	p, _ := ants.NewPoolWithFunc(50000, func(i interface{}) {
+		if(Portcheck(i.(string))){
+			result = append(result, i.(string))
+		}
+		wg.Done()
+	})
 	for _,target := range targets{
-		tmp := strings.Split(target,":")
-		ip := tmp[0]
-		port := tmp[1]
 		wg.Add(1)
-		go func(ip string,port string) {
-			defer wg.Done()
-			if (Portcheck(ip,port)){
-				result = append(result, ip)
-			}
-		}(ip,port)
+		_ = p.Invoke(target)
 	}
 	wg.Wait()
 	return result
 }
 
 func Tcpscan(ip string) {
+	var aliveip []string
 	ips := strings.Split(ip,",")
 	targets := iprange(ips,topport)
-	aliveip := TcpscanOne(targets)
+	result := TcpscanOne(targets)
+	for _,ip := range result{
+		tmp := strings.Split(ip,":")
+		aliveip = append(aliveip,tmp[0])
+	}
 	aliveip = Removesamesip(aliveip)
 	fmt.Fprintln(color.Output,color.CyanString("存活的主机:"))
 	for _,v := range aliveip{
