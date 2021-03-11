@@ -16,12 +16,15 @@ require (
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/google/gopacket v1.1.19
 	github.com/kennygrant/sanitize v1.2.4 // indirect
+	github.com/mattn/go-isatty v0.0.12 // indirect
+	github.com/panjf2000/ants/v2 v2.4.3 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/projectdiscovery/ipranger v0.0.2 // indirect
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/temoto/robotstxt v1.1.1 // indirect
 	golang.org/dl v0.0.0-20210220033039-562909534da3 // indirect
 	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
+	golang.org/x/sys v0.0.0-20210309040221-94ec62e08169 // indirect
 	golang.org/x/text v0.3.5 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
