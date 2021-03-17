@@ -29,14 +29,12 @@ func Mscan(ips string,ports string) []string{
 	err := m.Run()
 	if err != nil {
 		log.Println("scanner failed:", err)
-		return
 	}
 
 	// 解析扫描结果
 	results, err := m.Parse()
 	if err != nil {
 		log.Println("Parse scanner result:", err)
-		return
 	}
 
 	for _, result := range results {
