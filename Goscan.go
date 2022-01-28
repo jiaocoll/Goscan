@@ -86,7 +86,7 @@ func main(){
 	}
 
 	if masnmapip != "" && masnmapport != ""{
-		targets := Masscan.Mscan("192.168.1.1","1-1000")
+		targets := Masscan.Mscan(masnmapip,masnmapport)
 		for _,target := range targets{
 			Fingerprint.Nmapscan(target)
 		}
